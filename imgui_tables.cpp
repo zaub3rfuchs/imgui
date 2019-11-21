@@ -213,6 +213,7 @@ Index of this file:
 #pragma warning (disable: 26451)    // [Static Analyzer] Arithmetic overflow : Using operator 'xxx' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator 'xxx' to avoid overflow(io.2).
 #pragma warning (disable: 26812)    // [Static Analyzer] The enum type 'xxx' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
 #endif
+IM_MSVC_RUNTIME_CHECKS_OFF
 
 // Clang/GCC warnings with -Weverything
 #if defined(__clang__)
@@ -4000,5 +4001,7 @@ void ImGui::Columns(int columns_count, const char* id, bool border)
 }
 
 //-------------------------------------------------------------------------
+
+IM_MSVC_RUNTIME_CHECKS_RESTORE
 
 #endif // #ifndef IMGUI_DISABLE

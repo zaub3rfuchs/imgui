@@ -60,6 +60,7 @@ Index of this file:
 #pragma warning (disable: 6255)     // [Static Analyzer] _alloca indicates failure by raising a stack overflow exception.  Consider using _malloca instead.
 #pragma warning (disable: 26451)    // [Static Analyzer] Arithmetic overflow : Using operator 'xxx' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator 'xxx' to avoid overflow(io.2).
 #pragma warning (disable: 26812)    // [Static Analyzer] The enum type 'xxx' is unscoped. Prefer 'enum class' over 'enum' (Enum.3). [MSVC Static Analyzer)
+IM_MSVC_RUNTIME_CHECKS_OFF
 #endif
 
 // Clang/GCC warnings with -Weverything
@@ -4148,5 +4149,7 @@ static const char* GetDefaultCompressedFontDataTTFBase85()
 {
     return proggy_clean_ttf_compressed_data_base85;
 }
+
+IM_MSVC_RUNTIME_CHECKS_RESTORE
 
 #endif // #ifndef IMGUI_DISABLE

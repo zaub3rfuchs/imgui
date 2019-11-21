@@ -94,6 +94,7 @@ Index of this file:
 #ifdef _MSC_VER
 #pragma warning (disable: 4996)     // 'This function or variable may be unsafe': strcpy, strdup, sprintf, vsnprintf, sscanf, fopen
 #pragma warning (disable: 26451)    // [Static Analyzer] Arithmetic overflow : Using operator 'xxx' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator 'xxx' to avoid overflow(io.2).
+IM_MSVC_RUNTIME_CHECKS_OFF
 #endif
 
 // Clang/GCC warnings with -Weverything
@@ -7700,5 +7701,7 @@ void ImGui::ShowUserGuide() {}
 void ImGui::ShowStyleEditor(ImGuiStyle*) {}
 
 #endif
+
+IM_MSVC_RUNTIME_CHECKS_RESTORE
 
 #endif // #ifndef IMGUI_DISABLE
