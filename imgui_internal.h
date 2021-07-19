@@ -2413,8 +2413,6 @@ namespace ImGui
     // Parameter stacks
     IMGUI_API void          PushItemFlag(ImGuiItemFlags option, bool enabled);
     IMGUI_API void          PopItemFlag();
-    IMGUI_API void          PushDisabled(bool disabled = true);
-    IMGUI_API void          PopDisabled();
 
 #ifndef IMGUI_DISABLE_OBSOLETE_FUNCTIONS
     // If you have old/custom copy-and-pasted widgets that used FocusableItemRegister():

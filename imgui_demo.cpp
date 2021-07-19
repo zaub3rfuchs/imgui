@@ -533,6 +533,12 @@ static void ShowDemoWindowWidgets()
     if (!ImGui::CollapsingHeader("Widgets"))
         return;
 
+    static bool disable_all = false;
+    ImGui::Checkbox("Disable all widgets below", &disable_all);
+    ImGui::SameLine(); HelpMarker("Demonstrate using PushDisabled()/PopDisabled() across the rest of window.");
+    if (disable_all)
+        ImGui::PushDisabled();
+
     if (ImGui::TreeNode("Basic"))
     {
         static int clicked = 0;
@@ -2190,15 +2196,19 @@ static void ShowDemoWindowWidgets()
             "InputFloat3", "ColorEdit4", "Selectable", "MenuItem", "TreeNode", "TreeNode (w/ double-click)", "Combo", "ListBox"
         };
         static int item_type = 1;
+        static bool item_disabled = false;
         ImGui::Combo("Item Type", &item_type, item_names, IM_ARRAYSIZE(item_names), IM_ARRAYSIZE(item_names));
         ImGui::SameLine();
         HelpMarker("Testing how various types of items are interacting with the IsItemXXX functions. Note that the bool return value of most ImGui function is generally equivalent to calling ImGui::IsItemHovered().");
+        ImGui::Checkbox("Item Disabled",  &item_disabled);
 
         // Submit selected item item so we can query their status in the code following it.
         bool ret = false;
         static bool b = false;
         static float col4f[4] = { 1.0f, 0.5, 0.0f, 1.0f };
         static char str[16] = {};
+        if (item_disabled)
+            ImGui::PushDisabled(true);
         if (item_type == 0) { ImGui::Text("ITEM: Text"); }                                              // Testing text items with no identifier/interaction
         if (item_type == 1) { ret = ImGui::Button("ITEM: Button"); }                                    // Testing button
         if (item_type == 2) { ImGui::PushButtonRepeat(true); ret = ImGui::Button("ITEM: Button"); ImGui::PopButtonRepeat(); } // Testing button (with repeater)
@@ -2226,6 +2236,7 @@ static void ShowDemoWindowWidgets()
             "IsItemHovered(_AllowWhenBlockedByPopup) = %d\n"
             "IsItemHovered(_AllowWhenBlockedByActiveItem) = %d\n"
             "IsItemHovered(_AllowWhenOverlapped) = %d\n"
+            "IsItemHovered(_AllowWhenDisabled) = %d\n"
             "IsItemHovered(_RectOnly) = %d\n"
             "IsItemActive() = %d\n"
             "IsItemEdited() = %d\n"
@@ -2244,6 +2255,7 @@ static void ShowDemoWindowWidgets()
             ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenBlockedByPopup),
             ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenBlockedByActiveItem),
             ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenOverlapped),
+            ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled),
             ImGui::IsItemHovered(ImGuiHoveredFlags_RectOnly),
             ImGui::IsItemActive(),
             ImGui::IsItemEdited(),
@@ -2257,6 +2269,9 @@ static void ShowDemoWindowWidgets()
             ImGui::GetItemRectMax().x, ImGui::GetItemRectMax().y,
             ImGui::GetItemRectSize().x, ImGui::GetItemRectSize().y
         );
+
+        if (item_disabled)
+            ImGui::PopDisabled();
 
         static bool embed_all_inside_a_child_window = false;
         ImGui::Checkbox("Embed everything inside a child window (for additional testing)", &embed_all_inside_a_child_window);
@@ -2327,6 +2342,9 @@ static void ShowDemoWindowWidgets()
 
         ImGui::TreePop();
     }
+
+    if (disable_all)
+        ImGui::PopDisabled();
 }
 
 static void ShowDemoWindowLayout()
@@ -3537,6 +3555,12 @@ static void ShowDemoWindowTables()
     //ImGui::SetNextItemOpen(true, ImGuiCond_Once);
     if (!ImGui::CollapsingHeader("Tables & Columns"))
         return;
+
+    static bool disable_all = false;
+    ImGui::Checkbox("Disable all widgets below", &disable_all);
+    ImGui::SameLine(); HelpMarker("Demonstrate using PushDisabled()/PopDisabled() across the rest of window.");
+    if (disable_all)
+        ImGui::PushDisabled();
 
     // Using those as a base value to create width/height that are factor of the size of our font
     const float TEXT_BASE_WIDTH = ImGui::CalcTextSize("A").x;
@@ -5228,6 +5252,9 @@ static void ShowDemoWindowTables()
 
     ShowDemoWindowColumns();
 
+    if (disable_all)
+        ImGui::PopDisabled();
+
     if (disable_indent)
         ImGui::PopStyleVar();
 }
@@ -6041,6 +6068,7 @@ void ImGui::ShowStyleEditor(ImGuiStyle* ref)
             HelpMarker("When drawing circle primitives with \"num_segments == 0\" tesselation will be calculated automatically.");
 
             ImGui::DragFloat("Global Alpha", &style.Alpha, 0.005f, 0.20f, 1.0f, "%.2f"); // Not exposing zero here so user doesn't "lose" the UI (zero alpha clips all widgets). But application code could have a toggle to switch between zero and non-zero.
+            ImGui::DragFloat("Disabled Alpha", &style.DisabledAlpha, 0.005f, 0.0f, 1.0f, "%.2f"); ImGui::SameLine(); HelpMarker("Additional alpha multiplier for disabled items (multiply over current value of Alpha).");
             ImGui::PopItemWidth();
 
             ImGui::EndTabItem();
